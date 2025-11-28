@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    container_name: flipkart-backend
+    ports:
+      - "5001:5000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: flipkart
+      DB_PORT: 3306
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: flipkart-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+
+  mysql:
+    image: mysql:8.0
+    container_name: flipkart-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: flipkart
+    ports:
+      - "3307:3306"
